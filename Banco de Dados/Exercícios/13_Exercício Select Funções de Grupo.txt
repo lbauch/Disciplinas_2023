@@ -1,0 +1,41 @@
+a)
+SELECT AVG(qt_km_rodado) Media
+FROM veiculo;
+
+b)
+SELECT MIN(nr_ano_fab),MAX(nr_ano_fab)
+FROM veiculo;
+
+c)
+SELECT nr_ano_mod ano, COUNT(*)
+FROM veiculo
+GROUP BY nr_ano_mod
+ORDER BY nr_ano_mod;
+
+d)
+SELECT c.ds_combustivel, COUNT(*)
+FROM combustivel c, veiculo v, veiculo_combustivel vc
+WHERE c.cd_combustivel = vc.cd_combustivel
+AND v.nr_placa = vc.nr_placa
+GROUP BY(c.cd_combustivel);
+
+e)
+SELECT c.ds_combustivel, COUNT(*)
+FROM combustivel c, veiculo v, veiculo_combustivel vc
+WHERE c.cd_combustivel = vc.cd_combustivel
+AND v.nr_placa = vc.nr_placa
+GROUP BY(c.cd_combustivel);
+
+f)
+SELECT c.ds_combustivel, COUNT(*)
+FROM combustivel c, veiculo v, veiculo_combustivel vc
+WHERE c.cd_combustivel = vc.cd_combustivel
+AND v.nr_placa = vc.nr_placa
+GROUP BY(c.cd_combustivel);
+
+g)
+SELECT c.ds_combustivel, COUNT(*)
+FROM combustivel c, veiculo v, veiculo_combustivel vc
+WHERE c.cd_combustivel = vc.cd_combustivel
+AND v.nr_placa = vc.nr_placa
+GROUP BY(c.cd_combustivel);

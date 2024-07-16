@@ -1,0 +1,105 @@
+CREATE DATABASE Aula_07_11;
+USE Aula_07_11;
+
+CREATE TABLE Genero(
+	cd_genero INT PRIMARY KEY AUTO_INCREMENT,
+	ds_genero VARCHAR(30) UNIQUE NOT NULL
+);
+
+CREATE TABLE Ator(
+	cd_ator INT PRIMARY KEY AUTO_INCREMENT,
+	nm_ator VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Censura(
+	cd_censura INT PRIMARY KEY AUTO_INCREMENT,
+	ds_censura VARCHAR(30) UNIQUE NOT NULL
+);
+
+CREATE TABLE Filme(
+	cd_filme INT PRIMARY KEY AUTO_INCREMENT,
+	cd_censura INT NOT NULL ,
+	cd_genero INT NOT NULL,
+	nm_filme VARCHAR(50) NOT NULL,
+	ds_sinopse VARCHAR(250) NOT NULL,
+	nr_duracao VARCHAR(20) NOT NULL,
+	dt_lancamento DATE NOT NULL,
+	fl_dublado CHAR(1) NOT NULL,
+	CONSTRAINT FOREIGN KEY(cd_genero) REFERENCES Genero(cd_genero),
+	CONSTRAINT FOREIGN KEY(cd_censura) REFERENCES Censura(cd_censura)
+);
+
+CREATE TABLE Filme_Ator(
+	cd_filme INT NOT NULL,
+	cd_ator INT NOT NULL,
+	CONSTRAINT PRIMARY KEY(cd_filme,cd_ator)
+);
+
+INSERT INTO Genero(ds_genero)
+VALUES
+('Ação'),
+('Comédia'),
+('Aventura');
+
+SELECT * FROM Genero;
+
+INSERT INTO Censura(ds_censura)
+VALUES
+('Livre'),
+('14 Anos'),
+('18 Anos');
+
+INSERT INTO Ator(nm_ator)
+VALUES
+('Nicolas Cage'),
+('Brad Pitt'),
+('Arnold Schwarzenegger'),
+('Angelina Jolie'),
+('Gal Gadot');
+
+ALTER TABLE Filme MODIFY COLUMN nr_duracao VARCHAR(20) NULL DEFAULT NULL;
+
+
+INSERT INTO Filme (cd_genero, cd_censura, nm_filme, ds_sinopse, nr_duracao, dt_lancamento, fl_dublado)
+VALUES
+(1,2,'Resgate do Soldado Ryan','Resgatar Ryan','2h e 10min','2023-11-07','S'),
+(3,1,'Viagem ao Centro da Terra','Aventura inspirada em Julio Verne', '1h e 30min','2020-04-02','N'),
+(1,3,'Rota de Fuga','Um agente especial tenta escapar da prisão', '2h e 10min','2023-01-04','S');
+
+INSERT INTO Filme (cd_genero, cd_censura, nm_filme, ds_sinopse, dt_lancamento, fl_dublado)
+VALUES
+(2,3,'Até que a Sorte nos Separe','Ganhar na loteria foi oque causou a separação do casal','2015-07-06','N'),
+(2,1,'Um Conto de Natal','O natal pode ser um bom tempo para repensar as atutudes...','2023-12-18','S');
+
+
+INSERT INTO Filme_Ator
+VALUES
+(1,2),
+(1,5),
+(2,3),
+(3,1),
+(3,4),
+(4,5),
+(5,1),
+(5,5);
+
+
+UPDATE Filme
+SET fl_dublado = 'S'
+WHERE nr_duracao IS NULL;
+
+SELECT nm_filme AS FILME, ds_sinopse AS SINOPSE, nr_duracao AS DURAÇÃO, dt_lancamento AS 'DATA LANÇAMENTO', fl_dublado AS DUBLADO
+FROM Filme
+WHERE dt_lancamento LIKE '%2023%';
+
+ALTER TABLE Filme MODIFY COLUMN ds_sinopse VARCHAR(250) NULL DEFAULT NULL;
+
+UPDATE Filme
+SET ds_sinopse = NULL
+WHERE cd_filme = 5;
+
+DELETE FROM Filme_Ator
+WHERE cd_filme = 5;
+
+DELETE FROM Filme
+WHERE ds_sinopse IS NULL;

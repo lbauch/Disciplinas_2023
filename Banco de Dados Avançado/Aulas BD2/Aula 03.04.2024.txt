@@ -1,0 +1,123 @@
+/* 1) Listar o nome dos distritos (fl_tipo_localidade= 'D') e do respectivo município que cada 
+distrito está associado. Considerar como filtro apenas a UF "SC"; */
+SELECT nm_localidade, fl_tipo_localidade, nm_localidade_comp
+FROM localidade l
+WHERE fl_tipo_localidade = 'D'
+AND sg_uf = 'SC';
+
+SELECT d.nm_localidade "distrito", l.nm_localidade "município",d.nm_localidade_comp, d.fl_tipo_localidade
+FROM localidade l, localidade d
+WHERE d.cd_localidade_sub = l.cd_localidade
+AND d.fl_tipo_localidade = 'D'
+AND l.sg_uf = 'SC'
+ORDER BY 1;
+
+
+SELECT d.nm_localidade "distrito", l.nm_localidade "município",d.nm_localidade_comp, d.fl_tipo_localidade
+FROM localidade l JOIN localidade d
+ON (d.cd_localidade = l.cd_localidade)
+WHERE d.fl_tipo_localidade = 'D'
+AND l.sg_uf = 'SC'
+ORDER BY 1;
+
+
+DESC localidade;
+
+/*
+SELECT l.nm_logradouro, COUNT(l.nm_logradouro) AS qtd
+FROM logradouro l
+WHERE lc.sg_uf = 'SC'
+GROUP BY l.nm_logradouro
+ORDER BY 2 DESC LIMIT 2
+*/
+
+
+
+/* 2) Qual o nome de logradouro mais popular encontrado nos municípios da UF "SC".  Listar também o número de vezes encontrado;*/
+SELECT l.nm_logradouro, COUNT(l.nm_logradouro) AS qtd
+FROM logradouro l
+WHERE l.sg_uf = 'SC'
+GROUP BY l.nm_logradouro
+HAVING COUNT(l.nm_logradouro) >= ALL (SELECT COUNT(l.nm_logradouro) AS qtd
+													FROM logradouro l
+													WHERE l.sg_uf = 'SC'
+													GROUP BY l.nm_logradouro);
+													
+
+SELECT l.nm_logradouro, COUNT(l.nm_logradouro) AS qtd
+FROM logradouro l
+WHERE l.sg_uf = 'SC'
+GROUP BY l.nm_logradouro
+HAVING COUNT(l.nm_logradouro) >= ALL (SELECT COUNT(l.nm_logradouro) AS qtd
+													FROM logradouro l
+													WHERE l.sg_uf = 'SC'
+													GROUP BY l.nm_logradouro
+													ORDER BY 1 DESC LIMIT 1);
+/*Quando a subconsulta retorna somente um valor, pode-se usar somente o comparador (=).
+Entretanto, caso haja mais de um retorno, é necessário o >=, <=, junto com "in", "any" ou "all"*/
+
+
+
+
+
+/* 3) Quais nomes de municípios são encontrados em mais de uma UF. Listar também a quantidade de vezes em que o mesmo é encontrado; */
+SELECT nm_localidade, COUNT(nm_localidade)
+FROM localidade
+WHERE fl_tipo_localidade = 'M'
+GROUP BY nm_localidade
+HAVING COUNT(nm_localidade) > 1
+ORDER BY COUNT(nm_localidade) DESC;
+
+
+/* 4) Exibir a UF e o percentual de municípios de cada UF que apresentam apenas um CEP; */
+SELECT l.sg_uf AS UF, 
+      ROUND((COUNT(nr_cep) * 100)/COUNT(*),2) AS "% de município com UM CEP"    
+FROM localidade l
+WHERE l.fl_tipo_localidade ='M'
+GROUP BY l.sg_uf
+ORDER BY 2 DESC;
+
+
+
+
+-- cria uma tabela com apenas uma coluna com TODOS os CEPS que existem na base de dados 
+CREATE TABLE dados_brasil
+as
+SELECT concat(l1.nm_logradouro_comp,', ',b.nm_bairro,', ', l2.nm_localidade_comp,'/',l1.sg_uf,' - ', l1.nr_cep) AS endereco
+FROM logradouro l1, bairro b, localidade l2
+WHERE l1.cd_bairro_inicio = b.cd_bairro
+  AND l1.cd_localidade = l2.cd_localidade
+-- adicionado os dados dos municípios com apenas um CEP  
+UNION
+  SELECT concat(l.nm_localidade_comp,'/',l.sg_uf,' - ',l.nr_cep)
+  FROM localidade l  
+  WHERE l.nr_cep IS NOT NULL
+  UNION 
+-- adiciona os dados dos Grandes Usuários 
+    SELECT concat(gu.nm_grande_usuario,', ',gu.ds_endereco,', ',b.nm_bairro, l.nm_localidade_comp,'/',gu.sg_uf,' - ',gu.nr_cep)
+    FROM grande_usuario gu, bairro b, localidade l
+     WHERE gu.cd_bairro = b.cd_bairro
+      AND gu.cd_localidade = l.cd_localidade;
+
+ALTER TABLE dados_brasil ENGINE=MYISAM;
+
+DESC dados_brasil;
+
+SELECT * FROM dados_brasil;
+
+SELECT DISTINCT (endereco) FROM dados_brasil;
+
+
+CREATE INDEX idx_dados_brasil_endereco ON dados_brasil(endereco);
+CREATE FULLTEXT INDEX idx_dados_brasil_endereco_full ON dados_brasil(endereco);
+
+
+SELECT *
+FROM dados_brasil
+WHERE MATCH(endereco)
+      AGAINST('"Pedro Schmitt"' IN BOOLEAN MODE);
+      
+SELECT *
+FROM dados_brasil
+WHERE MATCH(endereco)
+      AGAINST('Pedro +Schmitt' IN BOOLEAN MODE);

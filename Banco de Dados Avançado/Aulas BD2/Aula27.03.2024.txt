@@ -1,0 +1,33 @@
+EXPLAIN
+SELECT * FROM localidade
+WHERE cd_localidade = 243;
+
+SELECT * FROM localidade
+WHERE nm_localidade = 'Blumenau';
+
+-- CREATE INDEX nome_indice ON nome_tabela(coluna,1 coluna2);
+-- criando indice para a coluna localidade na tabela localidade
+
+CREATE INDEX idx_localidade_nm_localidade ON localidade(nm_localidade);
+
+CREATE INDEX idx_localidade_sg_uf ON localidade(sg_uf);
+-- Não é recomendado fazer.
+
+CREATE INDEX idx_logradouro_sg_uf ON logradouro(sg_uf);
+
+SELECT tabs.TABLE_NAME, tabs.`ENGINE`
+FROM information_schema.`TABLES` tabs
+WHERE tabs.TABLE_SCHEMA = 'base_ceps';
+
+SHOW INDEX FROM localidade;
+
+SELECT DISTINCT sg_uf
+FROM localidade;
+
+EXPLAIN
+SELECT * FROM logradouro
+WHERE sg_uf = 'SC';
+
+EXPLAIN
+SELECT * FROM logradouro
+WHERE sg_uf IN ('SC','PR','RS');

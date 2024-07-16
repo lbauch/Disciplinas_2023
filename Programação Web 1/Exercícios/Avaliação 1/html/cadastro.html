@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/estiloCadastro.css">
+        <script src="../js/cadastro.js"></script>
+        <title>Cadastro</title>
+    </head>
+    <body>
+        <header>
+            <div class="esquerda">
+                <a href="index.html"><img src="../imagens/favicon.jpg"
+                        title="Anabella" height="50em"></a>
+            </div>
+        </header>
+        <section class="selecaoTema">
+            <h3>Tema:</h3>
+            <div class="temas">
+                <div class="temaNormal">
+                    <label for="temaNormal">Normal:</label>
+                    <input type="radio" name="tema" id="temaNormal" checked onclick="resetaTema()">
+                </div>
+                <div class="temaCustom">
+                    <label for="temaCustom">Custom:</label>
+                    <input type="radio" name="tema" id="temaCustom" onclick="mudaTema()">
+                </div>
+            </div>
+        </section>
+        <section class="forms1">
+            <form method="get" class="formulario">
+
+                <label for="nome">Nome:</label>
+                <input type="text" name="login" id="login" placeholder="Nome"
+                    maxlength="15" autofocus required><br>
+                <label for="senha">Senha:</label>
+                <input type="password" name="senha" id="senha"
+                    placeholder="Informe sua senha" required><br>
+                <label for="confirmaSenha">Confirmar Senha:</label>
+                <input type="password" name="senha" id="confirmaSenha"
+                    placeholder="Confirme sua senha" required><br>
+                <input type="text" name="campo1" value="CAMPO1" size="15"
+                    readonly>
+                <input type="text" name="campo2" value="CAMPO2" size="15"
+                    disabled>
+                <input type="hidden" name="campo3" value="escondido">
+                <br>
+
+                <label for="idade">Idade:</label>
+                <input type="number" name="idade" id="idade" placeholder="idade"
+                    min="10" max="90"><br>
+                <label for="novoUsuario">Novo usuário?</label>
+                <input type="checkbox" name="novoUsuario" id="novoUsuario"
+                    value="S" checked><br>
+
+                <label">Cidade: </label><br>
+                <input type="radio" name="cidade" id="cidade1" value="BNU">
+                <label for="cidade1">Blumenau</label>
+                <input type="radio" name="cidade" id="cidade2" value="GSP"
+                    checked>
+                <label for="cidade2">Gaspar</label>
+                <input type="radio" name="cidade" id="cidade3" value="IND">
+                <label for="cidade3">Indaial</label><br>
+
+                <label for="dtNascimento">Data nascimento:</label>
+                <input type="date" name="dtNascimento" id="dtNascimento"><br>
+
+                <label for="estado">Estado:</label>
+                <select name="estado" id="estado">
+                    <option value="PR">Paraná</option>
+                    <option value="SC" selected>Santa Catarina</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                </select><br>
+
+                <br><input type="reset" value="Apagar">
+                <input type="submit" value="Enviar" onclick="enviar()">
+            </form>
+        </section>
+        <footer>
+            Bruna Schroeder<br>
+            Lucas Bauchspiess<br>
+            Rafael Ehlert
+        </footer>
+    </body>
+</html>

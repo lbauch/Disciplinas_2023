@@ -1,0 +1,64 @@
+a)
+SELECT * FROM Modelo
+ORDER BY ds_descricao;
+
+
+b)
+SELECT ds_marca FROM Marca;
+
+
+c)
+SELECT nm_proprietario, sg_uf
+FROM Proprietario
+WHERE sg_uf = 'SC' OR sg_uf = 'PR';
+
+
+d)
+SELECT nm_proprietario, ds_email, nr_telefone
+FROM Proprietario
+WHERE ds_email IS NULL AND nr_telefone IS NOT NULL;
+
+
+e)
+SELECT nm_proprietario FROM Proprietario
+WHERE nm_proprietario LIKE '%Silva%';
+
+
+f)
+SELECT * FROM Veiculo
+WHERE nr_ano_fab != nr_ano_mod;
+
+
+g)
+SELECT nr_placa AS 'PLACA', nr_ano_mod AS 'ANO MODELO', qt_km_rodado AS 'KM RODADOS', qt_portas AS 'QTD PORTAS'
+FROM Veiculo
+WHERE nr_ano_fab >= 2000;
+
+
+h)
+SELECT nr_placa AS PLACA FROM Veiculo
+WHERE ds_observacao IS NULL;
+
+
+i)
+SELECT * FROM Veiculo
+WHERE qt_portas >=4
+ORDER BY cd_modelo DESC;
+
+
+j)
+SELECT * FROM Acessorio
+ORDER BY ds_acessorio;
+
+
+k)
+SELECT V.nr_placa AS 'PLACA', V.nr_ano_fab AS 'ANO FABRICAÇÃO', M.ds_modelo AS 'MODELO'
+FROM Veiculo V
+INNER JOIN Modelo M
+ON M.cd_modelo = V.cd_modelo
+WHERE V.nr_ano_fab >= 2015;
+
+
+l)
+SELECT nm_proprietario FROM Proprietario
+WHERE (ds_bairro LIKE '%Novo' OR ds_bairro LIKE '%Nova') AND sg_uf = 'SC';

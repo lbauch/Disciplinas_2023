@@ -1,0 +1,38 @@
+.sucesso {
+    background-color: lightgreen;
+    text-align: center;
+}
+
+.erro {
+    background-color: lightcoral;
+    text-align: left;
+}
+
+.cuidado {
+    background-color: yellow;
+    text-align: right;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+tr, td {
+    border: 1px solid black;
+    padding: 1em;
+}
+
+li:first-child {
+    font-weight: bold;
+}
+
+li:last-child {
+    font-weight: bold;
+    color: red;
+}
+
+/*tr:nth-child(odd) {
+tr:nth-child(even) {*/
+tr:nth-child(3n) {
+    background-color: lightgray;
+}

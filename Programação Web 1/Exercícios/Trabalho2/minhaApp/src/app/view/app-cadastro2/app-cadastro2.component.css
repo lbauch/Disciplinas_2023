@@ -1,0 +1,8 @@
+.cards_funcionarios{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 2rem;
+    justify-content: center;
+    margin: 1rem 0 2rem;
+}

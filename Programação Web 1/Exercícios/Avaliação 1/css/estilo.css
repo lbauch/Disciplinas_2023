@@ -1,0 +1,117 @@
+body{
+    background: #d2d2c1 url('../Imagens/fundo.png');
+    font: 16px Arial, Helvetica, sans-serif;
+}
+
+#menu{
+    background: #c5c5b2;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#conteudo{
+    background: #e8e8d9;
+    padding: 10px;
+}
+
+a{
+    color: #522204;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px;
+}
+
+a:hover{
+    color: #ad4403;
+}
+
+footer{
+    width: 100%;
+    background-color: #e8e8d9;
+    position: absolute;
+    bottom: 0px;
+}
+
+.esquerda{
+    display: inline-block;
+    text-align: left;
+    width: 50%;
+}
+
+.direita{
+    display: flex;
+    width: 10%;
+    float: right;
+    
+}
+
+.direita img{
+    border-radius: 50%;
+}
+
+.imgCapa{
+    display: flex;
+    justify-content: center;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.imgCapa img{
+    border-radius: 50px 0px;
+}
+
+@media screen and (max-width: 600px) {
+    .menuVertical {
+        display: block;
+    }
+    .menuHorizontal {
+        display: none;
+    }
+    .imgCapa{
+        width: 100%;
+        border-radius: 20%;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 800px){
+    .menuVertical {
+        display: none;
+    }
+    .menuHorizontal {
+        display: block;
+    }
+    .imgCapa{
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 801px) {
+    .menuVertical {
+        display: none;
+    }
+    .menuHorizontal {
+        display: block;
+    }
+    .imgCapa{
+        width: 800px;
+    }
+}
+
+.menuHorizontal > .menuPrincipal > li {
+    display: inline-block;
+}
+.subMenu {
+    display: none;
+    background-color: rgb(255, 239, 218);
+    position: fixed;
+    padding: 5px;
+    margin: 0;
+}
+.menuHorizontal > .menuPrincipal > li:hover .subMenu {
+    display: block;
+}
+.menuVertical > .menuPrincipal > li:hover .subMenu {
+    display: inline-block;
+}

@@ -1,0 +1,88 @@
+    body{
+        --cor-de-fundo: linear-gradient(90deg,#02005a,#0fa779);
+        --fonte-padrao: 16px Arial, Helvetica, sans-serif;
+        --cor-footer: #d9e5e8;
+        --cor-fundo-sections: rgba(0, 0, 0, 0.9);
+        --cor-fonte: white;
+
+        font: var(--fonte-padrao);
+        background-image: var(--cor-de-fundo);
+    }
+
+    .light{
+        --cor-de-fundo: linear-gradient(90deg,#00FFFF,#E6E6FA);
+        --fonte-padrao: 16px Times, Times New Roman, serif;
+        --cor-footer: #aad7f9;
+        --cor-fundo-sections: #abefc5;
+        --cor-fonte: black;
+    }
+
+    footer{
+        width: 100%;
+        background-color: var(--cor-footer);
+        position: fixed;
+        bottom: 0;
+    }
+
+    .forms1{
+        background-color: var(--cor-fundo-sections);
+        color: var(--cor-fonte);
+        display: flex;
+        justify-content: center;
+        width: 25%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100px;
+        padding: 1.3em;
+        border-radius: 10px;
+    }
+
+    .selecaoTema{
+        background-color: var(--cor-fundo-sections);
+        color: var(--cor-fonte);
+        display: block;
+        width: 25%;
+        text-align: center;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 7px;
+    }
+
+    .temas{
+        display: flex;
+        position: relative;
+        justify-content: center;
+    }
+
+    .temaNormal{
+        display: inline;
+    }
+
+    .temaCustom{
+        display: inline;
+        margin-left: 10px;
+    }
+
+    @media (max-width: 600px) {
+        .forms1{
+            display: flex;
+            width: 50%;
+        }
+        .selecaoTema{
+            width: 50%;
+        }
+    }
+
+    @media (min-width: 601px) and (max-width: 800px){
+        .forms1{
+            display: flex;
+            width: 40%;
+        }
+    }
+    @media (min-width: 801px) and (max-width: 1000px){
+        .forms1{
+            display: flex;
+            width: 35%;
+        }
+    }

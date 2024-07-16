@@ -1,0 +1,59 @@
+CREATE TABLE Marca(
+	cd_marca INT PRIMARY KEY AUTO_INCREMENT,
+	ds_marca VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE Modelo(
+	cd_modelo INT PRIMARY KEY,
+	ds_modelo VARCHAR(50) NOT NULL,
+	cd_marca INT UNIQUE,
+	FOREIGN KEY(cd_marca)
+	REFERENCES Marca(cd_marca)
+);
+
+CREATE TABLE Combustivel(
+	cd_combustivel INT PRIMARY KEY,
+	ds_combustivel VARCHAR(30)
+);
+
+CREATE TABLE Localidade(
+	cd_localidade INT PRIMARY KEY,
+	nm_localidade VARCHAR(50)
+);
+
+CREATE TABLE Proprietario(
+	cd_proprietario INT PRIMARY KEY,
+	nm_proprietario VARCHAR(50),
+	ds_logradouro VARCHAR(50),
+	ds_complemento VARCHAR(50),
+	ds_bairro VARCHAR(50),
+	nr_telefone VARCHAR(15),
+	ds_email VARCHAR(50),
+	sg_uf CHAR(2),
+	cd_localidade INT UNIQUE,
+	FOREIGN KEY(cd_localidade)
+	REFERENCES Localidade(cd_localidade)
+);
+
+CREATE TABLE Veiculo(
+	nr_placa CHAR(7) PRIMARY KEY,
+	nr_ano_fab INT,
+	nr_ano_modelo INT,
+	qt_km_rodado INT,
+	qt_portas INT,
+	ds_observacao VARCHAR(100),
+	cd_modelo INT UNIQUE,
+	FOREIGN KEY(cd_modelo)
+	REFERENCES Modelo(cd_modelo),
+	cd_proprietario INT UNIQUE,
+	FOREIGN KEY(cd_proprietario)
+	REFERENCES Proprietario(cd_proprietario)
+);
+
+CREATE TABLE Veiculo_Combustivel(
+	cd_combustivel INT NOT NULL,
+	nr_placa Char(7) NOT NULL,
+	CONSTRAINT Veiculo_Combustivel_pk PRIMARY KEY (nr_placa,cd_combustivel)
+);	
+
+

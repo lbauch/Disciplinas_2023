@@ -1,0 +1,53 @@
+/*a)*/
+SELECT ds_cor,COUNT(*)
+FROM cor c
+GROUP BY cd_cor
+HAVING COUNT(*)>=1;
+
+/*b)*/
+SELECT nr_placa placa, m.ds_modelo, v.nr_ano_mod
+FROM veiculo v
+JOIN modelo m
+ON (v.cd_modelo = m.cd_modelo)
+WHERE v.nr_ano_mod >= ALL
+	(SELECT MAX(v.nr_ano_mod)
+	FROM veiculo v)
+AND v.cd_modelo IN 
+(SELECT m.cd_modelo
+FROM modelo m);
+
+/*c)*/
+SELECT m.ds_modelo
+FROM modelo m
+GROUP BY(m.ds_modelo)
+HAVING COUNT(m.ds_modelo) >= ALL 
+	(SELECT MAX(m.ds_modelo)
+	FROM modelo m);
+
+/*d)*/
+SELECT ma.ds_marcar
+FROM marca ma
+JOIN modelo mo
+GROUP BY ma.ds_marcar
+HAVING COUNT(mo.ds_modelo) <= ALL
+	(SELECT COUNT(mo.ds_modelo)
+	FROM modelo mo);
+	
+/*e)*/
+SELECT a.ds_acessorio
+FROM acessorio a
+JOIN veiculo_acessorio va
+HAVING COUNT(a.ds_acessorio) >= ALL
+	(SELECT COUNT(va.cd_acessorio)
+	FROM veiculo_acessorio va
+	GROUP BY va.cd_acessorio);
+	
+
+/*f)*/
+SELECT a.ds_acessorio
+FROM acessorio a
+WHERE a.cd_acessorio NOT IN 
+	(SELECT v.nr_ano_fab
+	FROM veiculo v JOIN veiculo_acessorio va
+	ON (v.nr_placa = va.nr_placa)
+	WHERE v.nr_ano_fab <2017);

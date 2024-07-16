@@ -1,0 +1,107 @@
+CREATE TABLE medicamento(
+cd_medicamento INT AUTO_INCREMENT,
+nm_medicamento VARCHAR(50),
+ds_indicacao VARCHAR(100),
+vl_custo DECIMAL(6,2) DEFAULT 0,
+vl_venda DECIMAL(6,2) DEFAULT 0,
+qt_estoque INT DEFAULT 0,
+PRIMARY KEY(cd_medicamento)
+);
+
+CREATE TABLE notafiscal(
+nr_notafiscal INT AUTO_INCREMENT,
+dt_emissao DATE,
+vl_total DECIMAL(8,2) DEFAULT 0,
+PRIMARY KEY (nr_notafiscal)
+);
+
+CREATE TABLE itemnotafiscal(
+nr_notafiscal INT REFERENCES notafiscal(nr_notafiscal),
+cd_medicamento INT REFERENCES medicamento(cd_medicamento),
+qt_vendida INT DEFAULT 0,
+vl_produto DECIMAL(6,2) DEFAULT 0,
+PRIMARY KEY (nr_notafiscal, cd_medicamento)
+);
+
+INSERT INTO medicamento VALUES (1,'Dorflex 12un','dores musculares', 9.90, 15.0, 10);
+INSERT INTO medicamento VALUES (2,'Sedalgina 12cp','dores de cabeça', 5.90, 10.0, 20);
+INSERT INTO medicamento VALUES (3,'Benegripe','gripe e resfriado', 15.0, 25.0, 30);
+INSERT INTO medicamento VALUES (4,'Vodol 100ml','micose', 17.5, 30.0, 40);
+INSERT INTO medicamento VALUES (5,'Dermatos B','pele', 41.3, 80, 50);
+
+SELECT * FROM medicamento
+
+CREATE TABLE log_operacoes(
+nm_usuario VARCHAR(100),
+dt_operacao DATE,
+hr_operacao TIME,
+fl_operacao CHAR(1), -- U = UPDATE, I = INSERT, D = DELETE
+ds_informacao VARCHAR(100)
+);
+
+-- SELECT CURDATE()
+-- SELECT CURTIME()
+
+DELIMITER $$
+CREATE OR REPLACE TRIGGER tg_medicamento_log_delete BEFORE UPDATE ON medicamento
+FOR EACH ROW
+BEGIN
+	IF NEW.vl_venda <> OLD.vl_venda THEN
+	INSERT INTO log_operacoes VALUES(USER(), CURDATE(), CURTIME(), 'U', CONCAT('R$',  OLD.vl_venda, ' -> R$', NEW.vl_venda));
+	END IF;
+END $$
+
+DELIMITER $$
+CREATE OR REPLACE TRIGGER tg_medicamento_log_insert AFTER INSERT ON medicamento
+FOR EACH ROW
+BEGIN
+	IF NEW.vl_venda <> OLD.vl_venda THEN
+	INSERT INTO log_operacoes VALUES(USER(), CURDATE(), CURTIME(), 'I', CONCAT('R$',  OLD.vl_venda, ' -> R$', NEW.vl_venda));
+	END IF;
+END $$
+
+
+SELECT tg.TRIGGER_SCHEMA, tg.TRIGGER_NAME, tg.EVENT_MANIPULATION, tg.ACTION_STATEMENT
+FROM information_schema.`TRIGGERS` tg
+WHERE tg.TRIGGER_SCHEMA = 'base_pl_lucas_bauchspiess';
+
+SELECT * FROM medicamento
+
+UPDATE medicamento
+SET vl_venda = 11.0
+WHERE cd_medicamento = 2;
+
+SELECT * FROM log_operacoes
+
+
+-- *** *CENÁRIO *****
+
+/* após criada a NF, ao incluir um medicamento na respectiva NF criada, 
+
+   precisamos atualizar o estoque do referido medicamento.
+
+   Criar um gatilho para realizar esta atualização, inicialmente apenas atualizar o estoque! */
+   
+
+INSERT INTO notafiscal (dt_emissao) VALUES (CURDATE());
+SELECT * FROM notafiscal;
+
+INSERT INTO itemnotafiscal (nr_notafiscal, cdmedicamento, qt_vendida, vl_produto)
+VALUES (1, 1, 1, 13.0);
+
+DELIMITER $$
+CREATE OR REPLACE TRIGGER tg_itemnotafiscal_atualiza_estoque BEFORE INSERT
+ON itemnotafiscal FOR EACH ROW
+BEGIN
+	DECLARE var_estoque INT DEFAULT 0;
+	SET var_estoque = (SELECT qt_estoque FROM medicamento WHERE cd_medicamento = NEW.cd_medicamento);
+	if NEW.qt_vendida > var_estoque THEN
+		SET NEW.qt_vendida = var_estoque;
+	END IF;
+	UPDATE medicamento
+	SET qt_esoque = qt_estoque - NEW.qt_vendida
+	WHERE cd_medicamento = NEW.cd_medicamento;
+	UPDATE notafiscal
+	SET vl_total = vl_total + (NEW.qt_vendida * NEW.vl_produto)
+	WHERE nr_notafiscal = NEW.nr_notafiscal;
+END $$

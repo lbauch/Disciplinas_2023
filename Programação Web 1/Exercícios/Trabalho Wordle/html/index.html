@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="shortcut icon" href="../img/favicon.png">
+    <script src="../js/lib.js"></script>
+    <title>Wordle</title>
+</head>
+<body>
+    <header>
+        <p>
+            Letras em verde: letra e lugar corretos;<br>
+            Letras em amarelo: letra correta, lugar incorreto;<br>
+            Letras em branco: não presentes na palavra.<br>
+        </p>
+    </header>
+    <!--Palavra escolhida: prato-->
+    <main>
+        <input type="text" name="word" id="word"o placeholder="Palavra de 5 letras" maxlength="5" autocomplete="off" autofocus required><br><br>
+        <button onclick="registra()">Enviar</button>&nbsp;&nbsp;
+        <button onclick="resetar()">Resetar</button>
+    </main>
+    <footer>
+        <div>
+            <table id="tabela">
+                
+            </table>
+        </div>
+    </footer>
+</body>
+</html>

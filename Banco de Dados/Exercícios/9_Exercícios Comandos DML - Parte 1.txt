@@ -1,0 +1,205 @@
+INSERT INTO COMBUSTIVEL(ds_combustivel)
+VALUES
+('Gasolina Comum'),
+('Gasolina Aditivada'),
+('GNV'),
+('GLP'),
+('Diesel'),
+('Álcool'),
+('Eletricidade'),
+('Querosene'),
+('Nafta petroquímica'),
+('Carvão Mineral');
+
+
+INSERT INTO MARCA(ds_marca)
+VALUES
+('Mercedes'),
+('Ferrari'),
+('Lamborghini'),
+('Bugatti'),
+('Porsche'),
+('BMW'),
+('Jeep'),
+('Audi'),
+('Tesla'),
+('Volvo');
+
+
+INSERT INTO COR(ds_cor)
+VALUES
+('Azul Ciano'),
+('Verde Lima'),
+('Preto'),
+('Azul Anil'),
+('Branco Perolado'),
+('Atomic Orange'),
+('Velocity Yellow'),
+('Crystal Red'),
+('Z06 Carbon'),
+('Competition Grey');
+
+
+INSERT INTO LOCALIDADE(nm_localidade)
+VALUES
+('Leblon'),
+('Ipanema'),
+('Itaim Bibi'),
+('Lagoa'),
+('Pinheiros'),
+('Jardins'),
+('Moema'),
+('Savassi'),
+('Enseada do Suá'),
+('Santo Agostinho');
+
+
+INSERT INTO ACESSORIO(ds_acessorio)
+VALUES
+('Multimídia Integrado'),
+('Ar Condicionado Digital'),
+('Sensor de Estacionamento'),
+('Câmera de Ré'),
+('Conexão USB'),
+('Película'),
+('Capa para Volante de Couro'),
+('Banco de Couro'),
+('Xenon'),
+('LED');
+
+
+INSERT INTO PROPRIETARIO(cd_localidade, nm_proprietario, ds_logradouro, ds_complemento, ds_bairro, nr_telefone, ds_email, sg_uf)
+VALUES
+(1,'Pedro','Rua Almirante Tamandaré, 298','Casa','Leblon','49985169532','pedro@hotmail.com','RJ'),
+(1,'Pedro Henrique','Rua Almirante Barroso','Apto 3','Leblon','49995236874','pedropaulo@outlook.com','RJ'),
+(2,'Gregório','Avenida Nereu Ramos, 553','Apto 202','Ipanema','44987453547','greg@gmail.com','RJ'),
+(3,'Karina','Rua das Palmeiras','S/N, ao lado da Tagueara','Itaim Bibi','49997463210','karina@hotmail.com','SP'),
+(3,'Inacio','Avenida José de Alencar, 987','Casa','Itaim Bibi','49995326944','inacio@outlook.com','SP'),
+(4,'Amelia','Rua Taguatinga, 5475','Prédio Azul, Sala 2','Lagoa','49987546329','amelia@hotmail.com','RJ'),
+(5,'Ariadne','Rodovia BR 382, km 25, 1012','Ao lado do Shopping','Pinheiros','49993635241','ariadne@hotmail.com','SP'),
+(6,'Amélia','Avenida das Missões, 203','Sala 3','Jardins','49985142654','amelia@terra.br','SP'),
+(7,'Karina','Rua Tiradentes, 55','Quarteirão Inteiro','Moema','49985156984','karina@furb.com.br','SP'),
+(8,'Paulo','Rua Quintino Bocaiuva, 297','Casa','Savassi','49999965473','paulo@yahoo.com','MG'),
+(8,'Claudinei','Rua das Araucárias, 808','Apto 07','Savassi','49985323232','claudinei@hotmail.com','MG'),
+(9,'Nicole','Rua das Azaléias, 33','Sala 1','Enseada do Suá','49985654789','nicole@outlook.com','ES'),
+(9,'Adriana','Rua das Orquídeas','S/N, final da rua','Enseada do Suá','49988887777','adriana@gmail.com','ES'),
+(10,'Hélio','Avenida dos Imigrantes, 5523','Apto 522','Santo Agostinho','49984411228','helio@furb.com.br','RJ');
+
+
+INSERT INTO MODELO(cd_marca, ds_modelo)
+VALUES
+(1, 'Classe C'),
+(1, 'CLA'),
+(2, 'SF90'),
+(4, 'W16 Mistral'),
+(5, '911 Carrera'),
+(6, 'X6'),
+(3, 'Huracán'),
+(7, 'Renegade'),
+(8, 'A5'),
+(2, '458 Spider'),
+(2, '296 GTS'),
+(9, 'Model S'),
+(10, 'XC 60'),
+(6, '320i'),
+(3, 'Aventador');
+
+
+INSERT INTO VEICULO(nr_placa,cd_cor, cd_proprietario, cd_modelo, nr_ano_fab, nr_ano_mod, qt_km_rodado, qt_portas, ds_observacao)
+VALUES
+('AAA1111',1,1,1,2022,2023,1030,4,'Seminovo'),
+('BBB2222',2,2,2,2021,2022,20000,4,''),
+('KKK1111',5,11,11,2020,2021,3000,4,'Seminovo'),
+('LLL1212',2,12,12,2019,2019,6000,4,''),
+('CCC3333',3,3,3,2020,2020,5000,2,''),
+('DDD4444',4,4,4,2023,2023,1500,2,'Novo'),
+('EEE5555',5,5,5,2022,2022,4000,4,''),
+('NNN1414',8,14,14,2021,2022,3900,2,''),
+('GGG7777',7,7,7,2022,2022,2300,4,'Seminovo'),
+('HHH8888',8,8,8,2020,2020,22000,4,''),
+('III9999',9,9,9,2019,2020,24000,4,''),
+('JJJ1010',10,10,10,2023,2023,2000,4,'Seminovo'),
+('FFF6666',6,6,6,2023,2024,1000,2,'Novo'),
+('MMM1313',8,13,13,2023,2024,7000,4,'');
+
+INSERT INTO VEICULO_COMBUSTIVEL (cd_combustivel, nr_placa)
+VALUES 
+(1,'AAA1111'),
+(2,'AAA1111'),
+(3,'BBB2222'),
+(1,'BBB2222'),
+(5,'CCC3333'),
+(7,'CCC3333'),
+(9,'CCC3333'),
+(10,'CCC3333'),
+(6,'DDD4444'),
+(4,'EEE5555'),
+(5,'EEE5555'),
+(8,'FFF6666'),
+(4,'FFF6666'),
+(7,'GGG7777'),
+(10,'GGG7777'),
+(1,'HHH8888'),
+(8,'III9999'),
+(6,'III9999'),
+(5,'JJJ1010'),
+(4,'JJJ1010'),
+(8,'KKK1111'),
+(3,'KKK1111'),
+(2,'LLL1212'),
+(9,'LLL1212'),
+(1,'MMM1313'),
+(1,'NNN1414');
+
+
+INSERT INTO VEICULO_ACESSORIO (cd_acessorio, nr_placa)
+VALUES 
+
+(5,'CCC3333'),
+(6,'III9999'),
+(5,'JJJ1010'),
+(7,'CCC3333'),
+(9,'CCC3333'),
+(10,'CCC3333'),
+(6,'DDD4444'),
+(4,'EEE5555'),
+(5,'EEE5555'),
+(1,'AAA1111'),
+(3,'KKK1111'),
+(2,'LLL1212'),
+(2,'AAA1111'),
+(3,'BBB2222'),
+(1,'BBB2222'),
+(8,'FFF6666'),
+(4,'FFF6666'),
+(7,'GGG7777'),
+(10,'GGG7777'),
+(1,'HHH8888'),
+(8,'III9999'),
+(4,'JJJ1010'),
+(8,'KKK1111'),
+(9,'LLL1212'),
+(1,'MMM1313'),
+(1,'NNN1414'),
+(8,'CCC3333'),
+(10,'III9999'),
+(8,'JJJ1010'),
+(3,'CCC3333'),
+(1,'CCC3333'),
+(4,'CCC3333'),
+(1,'DDD4444');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

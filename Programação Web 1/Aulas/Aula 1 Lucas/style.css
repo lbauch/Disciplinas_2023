@@ -1,0 +1,59 @@
+h1{
+    font-size:100px;
+    background: linear-gradient(#8608da, #f01d1d);
+    color: rgb(0, 255, 136);
+    border-width: 30px;
+    border-radius: 20px;
+    border-color: darkorange;
+    border-style: dashed;
+    text-align: center;
+    padding: 5px;
+}
+
+h2{
+    font-size:75px;
+    background: linear-gradient(#5cda08, #eb9f12);
+    color: rgb(167, 2, 182);
+    border-width: 20px;
+    border-radius: 10px;
+    border-color:rgb(61, 4, 114);
+    border-style: dashed;
+    justify-content: space-between;
+    text-align: center;
+    padding: 20px;
+}
+
+.Teste{
+    font-size:50px;
+    background-color: wheat;
+    color: rgb(167, 2, 182);
+    border: none;
+    text-align:center;
+    padding: 20px;
+}
+
+.Loucura{
+    background-image: url("imgs/Montanha.jpg");
+}
+
+.Linque{
+    font-size:50px;
+    background-color: wheat;
+    color: rgb(167, 2, 182);
+}
+
+.Linque:hover, .active {
+    color:rgb(201, 7, 55)!important;
+    background-color: aquamarine;
+    cursor:pointer;
+}
+
+.linkA{
+    color:rgb(61, 4, 114);
+    text-decoration:none;
+}
+
+.linkA:hover, .active {
+    color: rgb(0, 255, 136);
+    text-decoration:none;
+}

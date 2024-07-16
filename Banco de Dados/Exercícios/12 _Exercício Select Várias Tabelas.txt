@@ -1,0 +1,86 @@
+a)
+SELECT p.nm_proprietario, l.nm_localidade
+FROM Proprietario p
+INNER JOIN Localidade l
+ON p.cd_localidade = l.cd_localidade;
+
+b)
+SELECT a.ds_marca, m.ds_modelo
+FROM Modelo m
+INNER JOIN Marca a
+ON m.cd_marca = a.cd_marca
+WHERE a.ds_marca = 'FIAT'
+ORDER BY m.ds_modelo;
+
+c)
+SELECT a.ds_marca,m.ds_modelo
+FROM Modelo m
+INNER JOIN Marca a
+ON m.cd_marca = a.cd_marca
+ORDER BY a.cd_marca, m.cd_modelo;
+
+d)
+SELECT v.nr_placa, v.nr_ano_mod, c.ds_cor
+FROM Veiculo v
+INNER JOIN Cor c
+ON c.cd_cor = v.cd_cor
+ORDER BY v.nr_ano_mod, c.ds_cor;
+
+e)
+SELECT v.nr_placa, p.nm_proprietario, l.nm_localidade
+FROM Veiculo v
+INNER JOIN Proprietario p
+ON v.cd_proprietario = p.cd_proprietario
+INNER JOIN Localidade l
+ON p.cd_localidade = l.cd_localidade
+WHERE p.sg_uf = 'SC';
+
+f)
+SELECT v.nr_placa, a.ds_marca, m.ds_modelo, v.nr_ano_mod, c.ds_combustivel
+FROM Veiculo v
+INNER JOIN Modelo m
+ON v.cd_modelo = m.cd_modelo
+INNER JOIN Marca a
+ON a.cd_marca = m.cd_marca
+INNER JOIN veiculo_combustivel k
+ON k.nr_placa = v.nr_placa
+INNER JOIN combustivel c
+ON k.cd_combustivel = c.cd_combustivel
+WHERE v.nr_placa IS NOT NULL AND
+a.ds_marca IS NOT NULL AND
+m.ds_modelo IS NOT NULL;
+
+g)
+SELECT v.nr_placa, a.ds_marca, m.ds_modelo
+FROM Veiculo v
+INNER JOIN Modelo m
+ON v.cd_modelo = m.cd_modelo
+INNER JOIN Marca a
+ON a.cd_marca = m.cd_marca
+INNER JOIN veiculo_acessorio k
+ON k.nr_placa = v.nr_placa
+INNER JOIN Acessorio ac
+ON ac.cd_acessorio = k.cd_acessorio
+WHERE v.nr_placa IS NOT NULL AND
+a.ds_marca IS NOT NULL AND
+m.ds_modelo IS NOT NULL AND
+ac.ds_acessorio = 'Direção Hidráulica';
+
+h)
+SELECT v.nr_placa, ma.ds_marca, mo.ds_modelo, c.ds_cor, v.nr_ano_mod, v.nr_ano_fab, v.qt_km_rodado, v.qt_portas, ac.ds_acessorio, co.ds_combustivel
+FROM Veiculo v
+INNER JOIN Modelo mo
+ON v.cd_modelo = mo.cd_modelo
+INNER JOIN Marca ma
+ON ma.cd_marca = mo.cd_marca
+INNER JOIN Cor c
+ON c.cd_cor = v.cd_cor
+INNER JOIN veiculo_acessorio k
+ON k.nr_placa = v.nr_placa
+INNER JOIN Acessorio ac
+ON ac.cd_acessorio = k.cd_acessorio
+INNER JOIN veiculo_combustivel n
+ON n.nr_placa = v.nr_placa
+INNER JOIN combustivel co
+ON n.cd_combustivel = co.cd_combustivel;
+

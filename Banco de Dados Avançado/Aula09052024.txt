@@ -1,0 +1,247 @@
+-- comando para visualizar as rotinas criadas.
+SELECT rou.SPECIFIC_NAME, rou.ROUTINE_NAME, rou.DATA_TYPE, rou.ROUTINE_DEFINITION
+FROM information_schema.ROUTINES rou
+WHERE rou.ROUTINE_SCHEMA = '??'
+-- substituir ?? pela base de dados desejada.
+
+-- FUNCTIONS COMUNS: 
+-- Arredonda com 2 casas decimais
+SELECT ROUND(1.4452,2) FROM dual; -- padrão Oracle
+-- Arredonda com 3 casas decimais
+SELECT ROUND(1.4452,3);
+
+USE base_pl_lucas_bauchspiess
+
+-- Quebra o n° com 2 casas decimais
+SELECT TRUNCATE(1.4452,2);
+-- Quebra o n° com 3 casas decimais
+SELECT TRUNCATE(1.4452,3);
+
+/*FUNÇÕES PARA LITERAL
+select CONCAT('BANCO',' DE',' DADOS')
+select INSERT('BANCO    DADOS',7,2,'DE')
+select INSTR('BANCO DE DADOS', 'DADOS');
+select LCASE('BANCO de DADOS');  - Funciona igual o LOWER. Em alguns bancos, é Lowercase
+select LOWER('BANCO de DADOS’);
+select UCASE('banco de dados');
+select UPPER('banco de dados');
+select TRIM(' BANCO DE DADOS ');  - Retira espaços em branco no começo e final da string
+select LTRIM(' Banco de Dados '); - Left Trim
+select RTRIM(' Banco de Dados ');  - Right Trim
+*/
+
+/*FUNÇÕES PARA DATA/HORA
+select CURDATE(); - Retorna a data atual do SO do BD (servidor do BD)
+select CURTIME(); - Retorna a hora do SO do BD
+select NOW();
+select YEAR(CURDATE());
+select ADDDATE(CURDATE(),60);
+select ADDDATE(CURDATE(),-60);
+select DAYOFWEEK(CURDATE()+1);
+select DATEDIFF(CURDATE(),'1974-04-06');
+select DATE_FORMAT("2017-06-15", "%d %m %Y");
+select DATE_FORMAT(CURDATE(),'%W,%M of %Y');
+*/
+
+DELIMITER $$
+CREATE OR REPLACE FUNCTION fc_tempo_servico (data DATE) RETURNS INTEGER
+BEGIN
+   DECLARE data_atual DATE;
+   DECLARE resultado INTEGER DEFAULT 0;
+   SET data_atual = (select CURDATE());
+   SET resultado = YEAR(data_atual) - YEAR(DATA);
+   if resultado < 0 then
+   	RETURN 0;
+	END if;
+	RETURN resultado;
+END $$
+
+SELECT fc_tempo_servico('1998-03-03') FROM DUAL; -- FROM DUAL OPCIONAL
+
+
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE pc_atualiza_valor_medicamento
+	(IN percentual INTEGER)
+BEGIN
+	UPDATE vl_venDA FROM medicamento
+		WHERE cd_medicamento = medicamento INTO preco;
+END $$
+
+
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE pc_obter_preco_medicamento 
+        (IN medicamento INTEGER, OUT preco DECIMAL(8,2))
+BEGIN
+    SELECT vl_venda FROM medicamento 
+       WHERE cd_medicamento = medicamento INTO preco;
+END $$
+ 
+SET @preco_retorno = 0.0;
+SELECT @preco_retorno;tg_itemnotafiscal_atualiza_estoquetg_itemnotafiscal_atualiza_estoque
+ 
+SELECT * FROM medicamento;
+CALL pc_obter_preco_medicamento(3,@preco_retorno); 
+SELECT @preco_retorno;
+
+DESC medicamento;
+
+-- rotina equivalente, porém do tipo "function", em substituição a procedure
+DELIMITER $$
+CREATE OR REPLACE FUNCTION fc_obter_preco_medicamento (id_medicamento INTEGER) RETURNS DECIMAL(8,2)
+BEGIN
+  DECLARE valor DECIMAL(8,2);
+  SET valor = (SELECT vl_venda FROM medicamento WHERE cd_medicamento = id_medicamento);
+  RETURN valor;
+END $$
+-- exemplo de chamada para obter o preço do produto cd = 3
+SELECT fc_obter_preco_medicamento(3);
+
+-- rotina para iniciar/criar uma "nota fiscal", retornando o "id" da mesma
+
+
+DELIMITER $$
+CREATE OR REPLACE FUNCTION fc_cria_nf() RETURNS INTEGER
+BEGIN
+	INSERT INTO notafiscal (dt_emissao, vl_total)
+		VALUES (CURDATE(), 0.0);
+	RETURN LAST_INSERT_ID();
+	/*LAST_UPDATE_ID();
+	LAST_DELETE_ID*/
+END $$
+
+DELETE FROM itemnotafiscal;
+DELETE FROM notafiscal;
+SELECT * FROM notafiscal;
+
+SELECT fc_cria_nf();
+
+DESC itemnotafiscal
+DESC medicamento
+DESC notafiscal
+
+SELECT * FROM medicamento
+SELECT * FROM itemnotafiscal
+
+-- rotina para inserir itens na nota fiscal, passando como parâmetros: id nota, medicamento e qtde
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE pc_insere_item_nf (IN nota INTEGER, medic INTEGER, IN qtde INTEGER)
+BEGIN
+	INSERT INTO itemnotafiscal(nr_notafiscal, cd_medicamento, qt_vendida, vl_produto)
+	VALUES(nota, medic, qtde, fc_obter_preco_medicamento(medic));
+END $$
+
+-- Executando a procedure
+CALL pc_insere_item_nf(4,3,1);
+
+
+DELIMITER $$
+CREATE OR REPLACE TRIGGER tg_itemnotafiscal_atualiza_estoque BEFORE INSERT 
+ON itemnotafiscal
+FOR EACH ROW
+BEGIN
+  -- declrando uma variável para o estoque do produto (tabela medicamento)
+  DECLARE var_estoque INT DEFAULT 0;
+  -- atribuindo o valor à variável
+  SET var_estoque = (SELECT qt_estoque FROM medicamento WHERE cd_medicamento = NEW.cd_medicamento);
+  -- ou
+  --  SELECT qt_estoque INTO var_estoque FROM medicamento WHERE cd_medicamento = NEW.cd_medicamento;
+  if NEW.qt_vendida > var_estoque THEN
+    SET NEW.qt_vendida = var_estoque;
+  END IF;
+  UPDATE medicamento
+    SET  qt_estoque = qt_estoque - NEW.qt_vendida
+    WHERE cd_medicamento = NEW.cd_medicamento;
+  UPDATE notafiscal
+    SET vl_total = vl_total + (NEW.qt_vendida * new.vl_produto)
+    WHERE nr_notafiscal = NEW.nr_notafiscal;  
+END $$
+
+
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE pc_calcula_desconto
+       (IN medic INTEGER, IN desconto DECIMAL(8,2), INOUT preco DECIMAL(8,2))
+BEGIN
+    SELECT vl_venda FROM medicamento
+WHERE cd_medicamento = medicamento INTO preco;
+    SET preco = preco - (preco * desconto /100);
+END$$
+
+SET @novo_preco = 0.0;medicamento
+CALL pc_calcula_desconto(4,15.5,@novo_preco);
+SELECT @novo_preco;
+
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE pc_totaliza_inventario (OUT resultado DECIMAL(8,2))
+BEGIN
+   -- Definição da variável de controle da estrutura – final da mesma
+   DECLARE final_loop INT DEFAULT 1;
+   -- Definição da variável que mantém o preço do produto (obtido da estrutura do cursor)
+   DECLARE produto_estoque INT DEFAULT 0;
+   -- Definição da variável que mantém o valor do produto (obtido da estrutura do cursor)
+   DECLARE produto_valor DECIMAL(8,2) DEFAULT 0.0;
+   -- Definição da variável que totalização o inventário
+   DECLARE total_inventario DECIMAL(8,2) DEFAULT 0.0;
+   -- Definição do cursor com a instrução SELECT que irá gerar a estrutura em memória
+   DECLARE cursor_estoque CURSOR FOR SELECT qt_estoque, vl_custo FROM medicamento;
+   -- Definição de quando o LOOP chegar no final será mudado o estado da variável
+   DECLARE CONTINUE HANDLER FOR NOT FOUND SET final_loop=0;
+   -- abertura do cursor
+   OPEN cursor_estoque;
+   -- Looping para percorrer o cursor
+   loop_cursor: LOOP
+       -- atribuição dos valores da estrutura (cursor) para as variáveis de manipulação
+       FETCH cursor_estoque INTO produto_estoque, produto_valor;
+       -- controle de existir mais registros na estrutura em memória (cursor)
+       IF final_loop = 0 THEN
+           LEAVE loop_cursor;
+       END IF;
+       -- soma o estoque x valor com o total acumulado
+       SET total_inventario = total_inventario + (produto_estoque * produto_valor);
+   END LOOP loop_cursor;
+   -- Setando a variável com o resultado final
+   SET resultado = total_inventario;
+   -- Fechamento do cursor
+   CLOSE cursor_estoque;
+END $$
+
+
+DELIMITER $$
+CREATE OR REPLACE function fc_totaliza_inventario () RETURNS DECIMAL(8,2)
+BEGIN
+   -- Definição da variável de controle da estrutura – final da mesma
+   DECLARE final_loop INT DEFAULT 1;
+   -- Definição da variável que mantém o preço do produto (obtido da estrutura do cursor)
+   DECLARE produto_estoque INT DEFAULT 0;
+   -- Definição da variável que mantém o valor do produto (obtido da estrutura do cursor)
+   DECLARE produto_valor DECIMAL(8,2) DEFAULT 0.0;
+   -- Definição da variável que totalização o inventário
+   DECLARE total_inventario DECIMAL(8,2) DEFAULT 0.0;
+   -- Definição do cursor com a instrução SELECT que irá gerar a estrutura em memória
+   DECLARE cursor_estoque CURSOR FOR SELECT qt_estoque, vl_custo FROM medicamento;
+   -- Definição de quando o LOOP chegar no final será mudado o estado da variável
+   DECLARE CONTINUE HANDLER FOR NOT FOUND SET final_loop=0;
+   -- abertura do cursor
+   OPEN cursor_estoque;
+   -- Looping para percorrer o cursor
+   loop_cursor: LOOP
+       -- atribuição dos valores da estrutura (cursor) para as variáveis de manipulação
+       FETCH cursor_estoque INTO produto_estoque, produto_valor;
+       -- controle de existir mais registros na estrutura em memória (cursor)
+       IF final_loop = 0 THEN
+           LEAVE loop_cursor;
+       END IF;
+       -- soma o estoque x valor com o total acumulado
+       SET total_inventario = total_inventario + (produto_estoque * produto_valor);
+   END LOOP loop_cursor;
+   -- Fechamento do cursor
+   CLOSE cursor_estoque;
+   -- setando o valor de retorno da função
+   RETURN total_inventario;
+END $$
+-- abaixo chamada da função
+select fc_totaliza_inventario ();
+-- abaixo declaração da variável de retorno e chamada da procedure
+SET @total = 0.0;
+CALL pc_totaliza_inventario (@total) 
+-- exibindo o valor da variável usada como parâmetro
+SELECT @total

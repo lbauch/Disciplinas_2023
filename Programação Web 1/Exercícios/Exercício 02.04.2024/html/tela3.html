@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/lib.js"></script>
+    <title>Tela 3</title>
+</head>
+<body>
+    <ul>
+        <li><button class="botaoSemBorda" onclick="exibirItem('Arroz')">Arroz</button></li>
+        <li><button class="botaoSemBorda" onclick="exibirItem('Feijão')">Feijão</button></li>
+        <li><button class="botaoSemBorda" onclick="exibirItem('Carne')">Carne</button></li>
+        <li><button class="botaoSemBorda" onclick="exibirItem('Macarrão')">Macarrão</button></li>
+        <li><button class="botaoSemBorda" onclick="exibirItem('Batata')">Batata</button></li>
+    </ul>
+    <div class="divCor">
+        Div trocar cor
+    </div><br>
+    <div>
+        <table>
+            <tr>
+                <th><button id="bt1" class="botaoSemBorda" onclick="vermelho(bt1)">C1</button></th>
+                <th><button id="bt2" class="botaoSemBorda" onclick="vermelho(bt2)">C2</button></th>
+                <th><button id="bt3" class="botaoSemBorda" onclick="vermelho(bt3)">C3</button></th>
+            </tr>
+            <tr>
+                <td><button id="bt4" class="botaoSemBorda" onclick="vermelho(bt4)">L1.C1</button></td>
+                <td><button id="bt5" class="botaoSemBorda" onclick="vermelho(bt5)">L1.C2</button></td>
+                <td><button id="bt6" class="botaoSemBorda" onclick="vermelho(bt6)">L1.C3</button></td>
+            </tr>
+            <tr>
+                <td><button id="bt7" class="botaoSemBorda" onclick="vermelho(bt7)">L2.C1</button></td>
+                <td><button id="bt8" class="botaoSemBorda" onclick="vermelho(bt8)">L2.C2</button></td>
+                <td><button id="bt9" class="botaoSemBorda" onclick="vermelho(bt9)">L2.C3</button></td>
+            </tr>
+        </table>
+    </div><br>
+
+    <!-- TELA OPCIONAL-->   
+    <div>
+        <table id="tabela2">
+            <tr>
+                <th>C1</th>
+                <th>C2</th>
+                <th>C3</th>
+            </tr>
+            <tr>
+                <td>L1.C1</td>
+                <td>L1.C2</td>
+                <td>L1.C3</td>
+            </tr>
+            <tr>
+                <td>L2.C1</td>
+                <td>L2.C2</td>
+                <td>L2.C3</td>
+            </tr>
+        </table>
+    </div>
+    <button onclick="insereLinha()">Adicionar Linha</button>
+</body>
+</html>

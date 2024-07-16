@@ -1,0 +1,21 @@
+.funcionario{
+    width: 250px;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+}
+
+.conteudo_funcionario .funcionario_email{
+    padding: 10px;
+}
+
+.funcionario_nome .funcionario_propriedade1 .funcionario_propriedade2{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.funcionario_email{
+    background-color: gray;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 10px;
+}

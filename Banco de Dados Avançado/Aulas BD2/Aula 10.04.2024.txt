@@ -1,0 +1,172 @@
+CREATE DATABASE base_lucas_bauchspiess
+
+USE base_lucas_bauchspiess
+base_lucas_bauchspiessbase_lucas_bauchspiessCREATE TABLE pessoa
+(id			  BIGINT(8) AUTO_INCREMENT,
+nome 		  VARCHAR(100),
+escolaridade VARCHAR(100),
+atividade    VARCHAR(100),
+email		  VARCHAR(100),
+logradouro   VARCHAR(150),
+cep	        VARCHAR(100),
+cidade	     VARCHAR(100),
+regiao		  VARCHAR(100),
+pais			  VARCHAR(100),
+telefone	  VARCHAR(100),
+alimentos    VARCHAR(250),
+PRIMARY KEY (id)
+) 
+ENGINE=MYISAM;
+
+SELECT * FROM pessoa;
+
+-- para importar, ir em ferramentas - importar arquivo CSV
+
+DESC pessoa;
+
+-- identificar as diferentes descrições de escolaridade cadastradas
+
+SELECT DISTINCT escolaridade
+FROM pessoa;
+
+CREATE TABLE escolaridade
+(id INT AUTO_INCREMENT,
+escolaridade VARCHAR(100),
+PRIMARY KEY (id)
+)
+ENGINE = MYISAM;
+
+INSERT INTO escolaridade(escolaridade)
+SELECT DISTINCT escolaridade FROM pessoa;
+
+-- criando uma tabela pessoa_temp para testes
+CREATE TABLE pessoa_temp
+AS SELECT * FROM pessoa WHERE id<=1000;
+
+ALTER TABLE pessoa_temp ENGINE=MYISAM;
+
+-- Alterando os dados de pessoa para receber o ID correspondente à escolaridade
+UPDATE pessoa pt
+SET pt.escolaridade = (SELECT e.id FROM escolaridade e WHERE e.escolaridade = pt.escolaridade);
+
+UPDATE pessoa_temp pt
+SET pt.escolaridade = (SELECT e.id FROM escolaridade e WHERE e.escolaridade = pt.escolaridade);
+
+-- Alterando o tipo de dado da coluna que recebeu o ID da escolaridade.
+ALTER TABLE pessoa_temp MODIFY COLUMN escolaridade INT;
+ALTER TABLE pessoa MODIFY COLUMN escolaridade INT;
+
+-- Alterando os dados da escolaridade para padrão
+
+-- De Graduação ou Nível Superior para Ensino Superior
+-- UPDATE pessoa_temp SET escolaridade = 3 WHERE escolaridade = 6;
+UPDATE pessoa SET escolaridade = 3 WHERE escolaridade IN (6,9);
+
+-- De Pós-Grad para Pós Graduação
+UPDATE pessoa SET escolaridade = 10 WHERE escolaridade = 4;
+
+SELECT * FROM pessoa;
+
+-- Eliminando dados "redundantes" de escolaridade
+DELETE FROM escolaridade WHERE id IN(4,6,9);
+
+-- Ajustando a FK para a tabela escolaridade
+ALTER TABLE escolaridade ENGINE = INNODB;
+ALTER TABLE pessoa ENGINE = INNODB;
+ALTER TABLE pessoa_temp ENGINE = INNODB;
+
+ALTER TABLE pessoa
+ADD CONSTRAINT pessoa_escolaridade_fk FOREIGN KEY(escolaridade)
+REFERENCES escolaridade(id);
+
+-- Validando a "relação entre as tabelas pessoa e base_lucas_bauchspiessbase_lucas_bauchspiessescolaridade
+SELECT p.nome, e.escolaridade
+FROM pessoa p, escolaridade e
+WHERE p.escolaridade = e.id;
+
+SELECT p.nome, e.escolaridade
+FROM pessoa p JOIN escolaridade e ON (p.escolaridade = e.id);
+
+-- testando a integridade dos dados entre as tabelas pessoa e escolaridade
+DELETE FROM escolaridade WHERE id=1;
+-- Deve apresentar um erro de tentativa de violação de FK
+
+SELECT DISTINCT escolaridade FROM pessoa;
+
+SELECT * FROM pessoa;
+
+SELECT DISTINCT pais
+FROM pessoa
+ORDER BY pais;
+
+CREATE TABLE pais
+(id INT AUTO_INCREMENT,
+pais VARCHAR(100),
+PRIMARY KEY (id)
+)
+
+INSERT INTO pais(pais)
+SELECT DISTINCT pais FROM pessoa;
+
+UPDATE pessoa pt
+SET pt.pais = (SELECT e.id FROM pais e WHERE e.pais = pt.pais);
+
+SELECT * FROM pais;
+
+ALTER TABLE pessoa MODIFY COLUMN pais INT;
+
+
+SELECT DISTINCT atividade
+FROM pessoa
+ORDER BY atividade;
+
+CREATE TABLE atividade
+(id INT AUTO_INCREMENT,
+atividade VARCHAR(100),
+PRIMARY KEY (id)
+)
+
+INSERT INTO atividade(atividade)
+SELECT DISTINCT atividade FROM pessoa;
+
+UPDATE pessoa pt
+SET pt.atividade = (SELECT e.id FROM atividade e WHERE e.atividade = pt.atividade);
+
+SELECT * FROM atividade;
+
+ALTER TABLE pessoa MODIFY COLUMN atividade INT;
+
+-- select distinct(substring_index(p.alimentos, ',', 1)) from pessoa p;
+
+CREATE TABLE pessoa_alimento 
+AS
+-- listando o "id" pessoa com os respectivos alimentos associados a cada "id"
+SELECT id,
+
+       trim(SUBSTRING_INDEX(SUBSTRING_INDEX(pt.alimentos, ',', numeros.qt), ',', -1)) AS alimento
+
+FROM pessoa pt
+
+JOIN (
+
+    SELECT 1 AS qt UNION 
+
+    SELECT 2 UNION 
+
+    SELECT 3 UNION 
+
+    SELECT 4 UNION 
+
+    SELECT 5 UNION 	     
+
+    SELECT 6 UNION 
+
+    SELECT 7 UNION 
+
+  	 SELECT 8 UNION 
+
+	 SELECT 9  
+
+) AS numeros
+
+ON LENGTH(pt.alimentos) - LENGTH(REPLACE(pt.alimentos, ',', '')) >= numeros.qt - 1;

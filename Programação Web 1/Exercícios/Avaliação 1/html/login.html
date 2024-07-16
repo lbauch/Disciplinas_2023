@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="shortcut icon" href="../imagens/favicon.jpg">
+    <link rel="stylesheet" type="text/css" href="../css/estilosLogin.css">    
+    <script src="../js/lib.js"></script>
+
+</head>
+<body>
+    <header>
+        <div class="esquerda">
+            <a href="index.html"><img src="../imagens/favicon.jpg" title="Anabella" height="50em"></a>
+        </div>
+    </header>
+    <main>
+
+        <div class="divLogin">
+            <form>
+                <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login</h1>
+                <label for="login">Login:&nbsp;&nbsp;</label>
+                <input type="text" id="login" placeholder="Usuario" name="login" autofocus required>
+                <br><br>
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" placeholder="senha" name="senha" required>
+                <br><br>
+                <label></label>
+                <label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </label>
+                <button id="btAutentica" onclick="autenticar()" formmethod="get">Autenticar</button>
+            </form>   
+        </div>
+    </main>
+    <footer>
+            Bruna Schroeder<br>
+            Lucas Bauchspiess<br>
+            Rafael Ehlert
+    </footer>
+</body>
+</html>

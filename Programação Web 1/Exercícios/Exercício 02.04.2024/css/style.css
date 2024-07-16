@@ -1,0 +1,27 @@
+/*Tela 1*/
+.primeiro {
+    background-color: red;
+}
+
+.segundo {
+    background-color: green;
+}
+
+.iguais {
+    background-color: yellow;
+}
+
+/*Tela 3*/
+.divCor:hover {
+    background-color: aqua;
+}
+
+.botaoSemBorda {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+table{
+    text-align: center;
+}

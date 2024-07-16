@@ -1,0 +1,33 @@
+% base de fatos e regras para relacoes de parentesco editada em: 25/11/2019
+
+/* ---------------------------------------------------
+   Fatos: homem( X ) e mulher( X ) 
+   -------------------------------------------------- */
+
+homem( pedro ).		
+homem( fabio ).
+homem( jean ).		
+
+mulher( paula ).	
+mulher( sara).		
+mulher( teresa ).	
+mulher( tatiana ).
+mulher( patricia ).
+mulher( claudia ).
+
+
+/* ---------------------------------------------------
+   Fatos: genitor(pai/mae, filho/filha) 
+   --------------------------------------------------- */
+
+genitor( pedro, fabio ).	genitor( paula, fabio ).
+genitor( pedro, teresa ).	genitor( paula, teresa ).
+genitor( fabio, tatiana ).	genitor( sara, tatiana ).
+genitor( fabio, jean ).		genitor( sara, jean ).
+genitor( jean,  claudia ).	genitor( patricia, claudia ).
+
+
+/* ---------------------------------------------------
+   Regras
+   --------------------------------------------------- */
+pai(X,Y) :- genitor(X,Y), homem(X).
